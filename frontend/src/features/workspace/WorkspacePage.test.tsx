@@ -231,7 +231,7 @@ describe('WorkspacePage', () => {
     ])
     renderApp('/d/nope')
     expect(await screen.findByText('Document not found')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Back to library' })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: 'Back to library' })).toHaveAttribute('href', '/library')
   })
 
   it('lists other documents in the rail and marks the current one', async () => {

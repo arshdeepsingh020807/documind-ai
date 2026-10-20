@@ -342,3 +342,9 @@
 .queue__item--error .queue__status { color: var(--bad); }
 .queue__item--uploading .queue__status,
 .queue__item--processing .queue__status { color: var(--accent-text); }
+
+.dialog__note {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}

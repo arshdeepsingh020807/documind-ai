@@ -18,7 +18,7 @@ export function StatusBadge({ status, busy = false }: StatusBadgeProps) {
     <Circle size={14} aria-hidden />
   // Icon + text, never colour alone.
   return (
-    <span className={`badge badge--${info.tone}`}>
+    <span className={`badge badge--${info.tone}`} title={info.hint}>
       {icon}
       {info.label}
     </span>

@@ -14,6 +14,9 @@ export interface QueueItem {
   state: ItemState
   progress: number
   message?: string
+  /** Set once the file is on the server, so a finished row can link to its chat. */
+  documentId?: string
+  ready?: boolean
 }
 
 /** Uploads files one at a time, optionally processing each as soon as it lands. */
@@ -48,6 +51,7 @@ export function useUploadQueue() {
         onProgress: (progress) => patch(id, { progress }),
       })
       void queryClient.invalidateQueries({ queryKey: documentsKey })
+      patch(id, { documentId: uploaded.document_id })
       if (!autoProcessRef.current) {
         patch(id, { state: 'done', progress: 1, message: 'Uploaded. Process it when you’re ready.' })
         return
@@ -55,7 +59,7 @@ export function useUploadQueue() {
       patch(id, { state: 'processing', progress: 1 })
       try {
         await processDocument({ id: uploaded.document_id, filename: uploaded.filename })
-        patch(id, { state: 'done', message: 'Ready to chat.' })
+        patch(id, { state: 'done', ready: true, message: 'Ready to chat.' })
       } catch (error) {
         patch(id, { state: 'error', message: `Uploaded, but processing failed. ${(error as Error).message}` })
       }

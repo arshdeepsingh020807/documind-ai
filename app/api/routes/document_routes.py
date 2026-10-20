@@ -1,12 +1,13 @@
 import mimetypes
 
-from fastapi import APIRouter, Depends, File, Response, UploadFile
+from fastapi import APIRouter, Depends, File, Query, Response, UploadFile
 from fastapi.responses import FileResponse
 
 from app.dependencies.services import (
     get_chat_service,
     get_document_service,
     get_indexing_service,
+    get_page_preview_service,
     get_upload_service,
 )
 from app.models.models.chatresponse import ChatResponse
@@ -18,6 +19,7 @@ from app.schemas.upload_response import UploadResponse
 from app.services.chatService import ChatService
 from app.services.document_service import DocumentService
 from app.services.IndexingService import IndexingService
+from app.services.page_preview import PagePreviewService
 from app.services.upload_service import UploadService
 
 router = APIRouter(
@@ -85,6 +87,19 @@ def download_document(
     document, path = document_service.get_file_path(document_id)
     media_type = mimetypes.guess_type(document.original_filename)[0] or "application/octet-stream"
     return FileResponse(path, media_type=media_type, filename=document.original_filename)
+
+
+@router.get("/{document_id}/passages/{chunk_index}/preview")
+def preview_passage(
+    document_id: str,
+    chunk_index: int,
+    page: int = Query(ge=1),
+    previews: PagePreviewService = Depends(get_page_preview_service),
+) -> Response:
+    """The cited PDF page as an image, with the passage highlighted. The passage text comes from our own
+    index (never from the URL), and a given passage's page never changes, so browsers may cache it."""
+    png = previews.preview(document_id, chunk_index, page)
+    return Response(content=png, media_type="image/png", headers={"Cache-Control": "private, max-age=86400"})
 
 
 @router.post(

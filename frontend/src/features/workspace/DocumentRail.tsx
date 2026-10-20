@@ -14,7 +14,7 @@ export function DocumentRail({ documents, loading, onNavigate }: DocumentRailPro
     <nav className="rail" aria-label="Documents">
       <div className="rail__head">
         <h2 className="rail__title">Documents</h2>
-        <Link to="/" className="rail__add" onClick={onNavigate}><Plus size={14} aria-hidden /> Library</Link>
+        <Link to="/library" className="rail__add" onClick={onNavigate}><Plus size={14} aria-hidden /> Library</Link>
       </div>
       {loading && <div className="skeleton-list rail__skeleton">{[0, 1, 2].map((i) => <div key={i} className="skeleton skeleton--line" />)}</div>}
       <ul className="rail__list">

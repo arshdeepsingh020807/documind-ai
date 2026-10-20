@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 # Most specific classes first; the first isinstance match wins.
 _STATUS_BY_ERROR: list[tuple[type[exc.DocuMindError], int]] = [
     (exc.DocumentNotFound, 404),
+    (exc.PreviewNotAvailable, 404),
     (exc.UnsupportedFileType, 400),
     (exc.EmptyFile, 400),
     (exc.FileTooLarge, 413),

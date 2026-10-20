@@ -7,6 +7,7 @@ import { FileIcon } from '../../components/FileIcon'
 import type { ChatMessage } from '../../lib/chatHistory'
 import { formatBytes, formatUploaded } from '../../lib/format'
 import { pageLabel } from './MessageItem'
+import { PagePreview } from './PagePreview'
 
 /** A citation the user just clicked. `token` changes on every click so repeat clicks re-flash the passage. */
 export interface Highlight {
@@ -45,6 +46,7 @@ export function SourcesPanel({ doc, message, highlight, onClose }: SourcesPanelP
               {sources.map((source) => (
                 <Passage
                   key={`${source.number}-${active?.number === source.number ? active.token : 0}`}
+                  doc={doc}
                   source={source}
                   active={active?.number === source.number}
                 />
@@ -75,7 +77,7 @@ export function SourcesPanel({ doc, message, highlight, onClose }: SourcesPanelP
 
 const CLAMP_CHARS = 320
 
-function Passage({ source, active }: { source: ChatSource; active: boolean }) {
+function Passage({ doc, source, active }: { doc: DocumentSummary; source: ChatSource; active: boolean }) {
   // Stays clamped when cited: a chunk can be hundreds of words, and the highlight is what draws the eye.
   const [expanded, setExpanded] = useState(false)
   const long = source.text.length > CLAMP_CHARS
@@ -104,6 +106,7 @@ function Passage({ source, active }: { source: ChatSource; active: boolean }) {
           {expanded ? 'Show less' : 'Show more'}
         </Button>
       )}
+      {source.page_start && <PagePreview doc={doc} source={source} startOpen={active} />}
     </li>
   )
 }

@@ -38,7 +38,7 @@ export function WorkspacePage() {
         <AppHeader />
         <main id="main" className="page page--narrow">
           {notFound ? (
-            <EmptyState level={1} title="Document not found" action={<Link to="/" className="btn btn--primary btn--md">Back to library</Link>}>
+            <EmptyState level={1} title="Document not found" action={<Link to="/library" className="btn btn--primary btn--md">Back to library</Link>}>
               It may have been deleted, or the link is wrong.
             </EmptyState>
           ) : (
@@ -102,7 +102,7 @@ function Workspace({ doc }: { doc: DocumentSummary }) {
     <div className="workspace-shell">
       <AppHeader>
         <div className="doc-bar">
-          <Link to="/" className="crumb"><ChevronLeft size={16} aria-hidden /> Library</Link>
+          <Link to="/library" className="crumb"><ChevronLeft size={16} aria-hidden /> Library</Link>
           <h1 className="doc-bar__title" title={doc.filename}>{doc.filename}</h1>
           <StatusBadge status={doc.status} busy={busy} />
           <span className="doc-bar__spacer" />

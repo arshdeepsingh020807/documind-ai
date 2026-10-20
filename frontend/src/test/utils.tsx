@@ -73,7 +73,7 @@ export function renderApp(initialPath: string, ui?: ReactElement) {
         <MemoryRouter initialEntries={[initialPath]}>
           {ui ?? (
             <Routes>
-              <Route path="/" element={<LibraryPage />} />
+              <Route path="/library" element={<LibraryPage />} />
               <Route path="/d/:id" element={<WorkspacePage />} />
             </Routes>
           )}

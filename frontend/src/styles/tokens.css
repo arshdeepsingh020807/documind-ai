@@ -17,29 +17,35 @@
 
   /* Text */
   --ink: #21201c;
-  --ink-2: #44433e;
-  --muted: #63635e;
+  --ink-2: #33322f;
+  --muted: #53534f;
 
   /* Accent: indigo. --accent is a fill (white text on it); --accent-text is for text and icons on light surfaces. */
   --accent: #3e63dd;
   --accent-hover: #3358d4;
   --accent-ink: #ffffff;
-  --accent-text: #3a5bc7;
+  --accent-text: #2e499f;
   --accent-soft: #edf2fe;
   --accent-soft-2: #e1e9ff;
   --accent-line: #abbdf9;
   --focus: #3e63dd;
 
   /* Status: text colour on a soft tint, so state is never colour alone (icons and labels carry it too). */
-  --good: #2a7e3b;
+  --good: #20612d;
   --good-soft: #e9f6e9;
-  --bad: #ce2c31;
+  --bad: #942023;
   --bad-soft: #feebec;
   --bad-solid: #ce2c31;
   --on-bad: #ffffff;
-  --busy: #8f5300;
+  --busy: #844c00;
   --busy-soft: #fff7c2;
   --neutral-soft: #e9e8e6;
+
+  /* A PDF page: the same in both themes, like a real document. Used by the landing demo. */
+  --paper: #f4f3ef;
+  --paper-ink: #21201c;
+  --paper-muted: #4a4a46;
+  --paper-mark: #fce995;
 
   --backdrop: rgb(24 22 18 / 0.45);
   --shadow-pop: 0 10px 32px rgb(33 32 28 / 0.16), 0 2px 6px rgb(33 32 28 / 0.08);
@@ -65,25 +71,31 @@
     --line-strong: #494844;
     --control: #85837c;
     --ink: #eeeeec;
-    --ink-2: #d1d0cb;
-    --muted: #c0beb8;
+    --ink-2: #e8e8e5;
+    --muted: #d5d4d0;
     --accent: #3e63dd;
     --accent-hover: #3358d4;
     --accent-ink: #ffffff;
-    --accent-text: #b2c2ff;
+    --accent-text: #ced8ff;
     --accent-soft: #182449;
     --accent-soft-2: #1d2e62;
     --accent-line: #3a4f97;
     --focus: #b2c2ff;
-    --good: #71d083;
+    --good: #aae3b5;
     --good-soft: #1b2a1e;
-    --bad: #ffa5a2;
+    --bad: #ffc7c5;
     --bad-soft: #3b1219;
     --bad-solid: #ce2c31;
     --on-bad: #ffffff;
-    --busy: #ffca16;
+    --busy: #ffcf2b;
     --busy-soft: #302008;
     --neutral-soft: #2a2a28;
+
+    /* A PDF page: the same in both themes, like a real document. Used by the landing demo. */
+    --paper: #f4f3ef;
+    --paper-ink: #21201c;
+    --paper-muted: #4a4a46;
+    --paper-mark: #fce995;
     --backdrop: rgb(0 0 0 / 0.6);
     --shadow-pop: 0 10px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.4);
   }
@@ -99,25 +111,31 @@
   --line-strong: #494844;
   --control: #85837c;
   --ink: #eeeeec;
-  --ink-2: #d1d0cb;
-  --muted: #c0beb8;
+  --ink-2: #e8e8e5;
+  --muted: #d5d4d0;
   --accent: #3e63dd;
   --accent-hover: #3358d4;
   --accent-ink: #ffffff;
-  --accent-text: #b2c2ff;
+  --accent-text: #ced8ff;
   --accent-soft: #182449;
   --accent-soft-2: #1d2e62;
   --accent-line: #3a4f97;
   --focus: #b2c2ff;
-  --good: #71d083;
+  --good: #aae3b5;
   --good-soft: #1b2a1e;
-  --bad: #ffa5a2;
+  --bad: #ffc7c5;
   --bad-soft: #3b1219;
   --bad-solid: #ce2c31;
   --on-bad: #ffffff;
-  --busy: #ffca16;
+  --busy: #ffcf2b;
   --busy-soft: #302008;
   --neutral-soft: #2a2a28;
+
+  /* A PDF page: the same in both themes, like a real document. Used by the landing demo. */
+  --paper: #f4f3ef;
+  --paper-ink: #21201c;
+  --paper-muted: #4a4a46;
+  --paper-mark: #fce995;
   --backdrop: rgb(0 0 0 / 0.6);
   --shadow-pop: 0 10px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.4);
 }

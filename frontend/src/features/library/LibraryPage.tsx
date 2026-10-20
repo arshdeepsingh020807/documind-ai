@@ -1,5 +1,5 @@
 import { Search, Upload } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ApiError } from '../../api/client'
 import { useDeleteDocument, useDocuments, useProcessDocument, useProcessingIds } from '../../api/hooks'
 import type { DocumentSummary } from '../../api/types'
@@ -15,9 +15,8 @@ import {
   applyView, DEFAULT_VIEW, isViewActive, SORT_OPTIONS, STATUS_OPTIONS,
   type LibraryView, type SortKey, type StatusFilter,
 } from './libraryView'
-import { UploadDialog } from './UploadDialog'
-import { useUploadQueue } from './useUploadQueue'
-import { useFileDrop } from './useFileDrop'
+import { UploadLayer } from '../upload/UploadLayer'
+import { useUploadFlow } from '../upload/useUploadFlow'
 
 export function LibraryPage() {
   useDocumentTitle('Library')
@@ -27,17 +26,9 @@ export function LibraryPage() {
   const processingIds = useProcessingIds()
 
   const [view, setView] = useState<LibraryView>(DEFAULT_VIEW)
-  const [uploadOpen, setUploadOpen] = useState(false)
-  const uploadQueue = useUploadQueue()
+  const upload = useUploadFlow()
   const [toDelete, setToDelete] = useState<DocumentSummary | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
-
-  const { addFiles } = uploadQueue
-  const onDropFiles = useCallback((files: File[]) => {
-    addFiles(files)
-    setUploadOpen(true)
-  }, [addFiles])
-  const dragging = useFileDrop(onDropFiles)
 
   const documents = documentsQuery.data
   const visible = useMemo(() => (documents ? applyView(documents, view) : []), [documents, view])
@@ -47,7 +38,7 @@ export function LibraryPage() {
     deleteMutation.mutate(toDelete, { onSettled: () => setToDelete(null) })
   }
 
-  const openUpload = () => setUploadOpen(true)
+  const openUpload = () => upload.setOpen(true)
 
   // "/" jumps to search, as on most sites with a search box, unless the user is already typing somewhere.
   useEffect(() => {
@@ -138,16 +129,7 @@ export function LibraryPage() {
         )}
       </main>
 
-      {dragging && (
-        <div className="drop-overlay" aria-hidden>
-          <div className="drop-overlay__card">
-            <Upload size={32} />
-            <p>Drop to upload</p>
-          </div>
-        </div>
-      )}
-
-      <UploadDialog open={uploadOpen} onClose={() => setUploadOpen(false)} queue={uploadQueue} />
+      <UploadLayer flow={upload} />
 
       <ConfirmDialog
         open={toDelete !== null}

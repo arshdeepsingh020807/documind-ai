@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ToastProvider } from './components/Toast'
+import { LandingPage } from './features/landing/LandingPage'
 import { LibraryPage } from './features/library/LibraryPage'
 import { NotFoundPage } from './features/NotFoundPage'
 import { WorkspacePage } from './features/workspace/WorkspacePage'
@@ -24,7 +25,8 @@ export function App() {
         <a href="#main" className="skip-link">Skip to content</a>
         <ErrorBoundary>
           <Routes>
-            <Route path="/" element={<LibraryPage />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/library" element={<LibraryPage />} />
             <Route path="/d/:id" element={<WorkspacePage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

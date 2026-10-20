@@ -8,7 +8,7 @@ const file = (name: string, content = 'hello', type = 'text/plain') => new File(
 
 async function openDialog() {
   const user = userEvent.setup({ applyAccept: false })
-  renderApp('/')
+  renderApp('/library')
   await screen.findByRole('heading', { name: 'Ask your documents questions' })
   await user.click(screen.getAllByRole('button', { name: /upload/i })[0]!)
   const dialog = await screen.findByRole('dialog', { name: 'Upload documents' })
@@ -86,5 +86,26 @@ describe('UploadDialog', () => {
     const { user, dialog } = await openDialog()
     await user.click(within(dialog).getByRole('button', { name: 'Done' }))
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  })
+
+  it('warns that the library is shared and the text goes to an AI provider', async () => {
+    const { dialog } = await openDialog()
+    expect(within(dialog).getByText(/every document is visible to everyone who uses it/)).toBeInTheDocument()
+    expect(within(dialog).getByText(/sent to an AI\s+provider/)).toBeInTheDocument()
+  })
+
+  it('links a finished upload to its chat, labelled by whether it is ready', async () => {
+    vi.spyOn(client, 'uploadDocument').mockResolvedValue({ document_id: 'new', filename: 'notes.txt', status: 'uploaded', message: 'ok' })
+    const { user, dialog, input } = await openDialog()
+    await user.upload(input, file('notes.txt'))
+    expect(await within(dialog).findByRole('link', { name: 'Open chat' })).toHaveAttribute('href', '/d/new')
+  })
+
+  it('offers a plain "Open" when the document was not processed', async () => {
+    vi.spyOn(client, 'uploadDocument').mockResolvedValue({ document_id: 'new', filename: 'notes.txt', status: 'uploaded', message: 'ok' })
+    const { user, dialog, input } = await openDialog()
+    await user.click(within(dialog).getByLabelText('Process after upload'))
+    await user.upload(input, file('notes.txt'))
+    expect(await within(dialog).findByRole('link', { name: 'Open' })).toHaveAttribute('href', '/d/new')
   })
 })

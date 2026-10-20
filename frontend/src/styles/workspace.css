@@ -631,3 +631,56 @@
   .doc-bar .badge,
   .doc-bar__download { display: none; }
 }
+
+/* ---------- Page preview (inside a passage card) ---------- */
+.preview {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+.preview > .btn { justify-self: start; margin-left: -8px; }
+.preview__tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.preview__tabs button {
+  min-height: 28px;
+  padding: 3px 10px;
+  border: 1px solid var(--control);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.preview__tabs button[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+/* Reserve an A4 page's height so the panel doesn't jump when the image arrives. */
+.preview__frame {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.414;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  cursor: zoom-in;
+}
+.preview__frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.preview__note { color: var(--muted); font-size: 13px; }
+.preview__large { display: block; width: 100%; height: auto; border-radius: var(--r-md); background: #fff; }
+
+/* ---------- One-time tip above the composer ---------- */
+.coach {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  font-size: 14px;
+}
+.coach > svg { flex: none; color: var(--accent-text); }
+.coach p { flex: 1; }

@@ -53,6 +53,11 @@ class DocumentNotProcessed(DocuMindError):
     pass
 
 
+class PreviewNotAvailable(DocuMindError):
+    """Raised when a page preview can't be produced (not a PDF, or the passage isn't on that page)."""
+    pass
+
+
 class AIProviderError(DocuMindError):
     """Raised when the embedding or language-model provider fails."""
     pass

@@ -20,5 +20,9 @@ class VectorStore(ABC):
     ) -> list[SearchResult]:
         pass
     @abstractmethod
+    def get_chunk(self, document_id: str, chunk_index: int) -> EmbeddedChunk | None:
+        pass
+
+    @abstractmethod
     def delete(self, document_id: str) -> None:
         pass

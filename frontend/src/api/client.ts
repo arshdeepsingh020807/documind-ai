@@ -120,6 +120,10 @@ export const api = {
     }),
 
   fileUrl: (id: string) => `/documents/${enc(id)}/file`,
+
+  /** The cited PDF page as an image, with the passage highlighted. */
+  previewUrl: (id: string, chunkIndex: number, page: number) =>
+    `/documents/${enc(id)}/passages/${chunkIndex}/preview?page=${page}`,
 }
 
 /** Upload uses XHR because fetch cannot report upload progress. */

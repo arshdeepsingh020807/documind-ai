@@ -101,6 +101,10 @@ def test_full_lifecycle_over_real_http(make_server):
         assert chat["answer"].endswith("[1]")
         assert chat["sources"][0]["number"] == 1 and chat["sources"][0]["page_start"] == 1
 
+        preview = c.get(f"/documents/{doc_id}/passages/{chat['sources'][0]['chunk_index']}/preview?page=1")
+        assert preview.status_code == 200 and preview.headers["content-type"] == "image/png"
+        assert preview.content.startswith(b"\x89PNG") and len(preview.content) > 5_000
+
         download = c.get(f"/documents/{doc_id}/file")
         assert download.headers["content-type"] == "application/pdf"
         assert download.content.startswith(b"%PDF")

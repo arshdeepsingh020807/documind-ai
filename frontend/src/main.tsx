@@ -1,5 +1,6 @@
 import '@fontsource-variable/inter'
 import '@fontsource-variable/newsreader'
+import '@fontsource-variable/newsreader/wght-italic.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -9,6 +10,7 @@ import './styles/base.css'
 import './styles/components.css'
 import './styles/library.css'
 import './styles/workspace.css'
+import './styles/landing.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

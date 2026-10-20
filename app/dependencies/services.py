@@ -16,6 +16,7 @@ from app.services.document_processor import DocumentProcessor
 from app.services.document_service import DocumentService
 from app.services.EmbeddingService import EmbeddingService
 from app.services.IndexingService import IndexingService
+from app.services.page_preview import PagePreviewService
 from app.services.processing_service import ProcessingService
 from app.services.prompt_builder import PromptBuilder
 from app.services.RetrievalService import RetriverService
@@ -63,6 +64,13 @@ def get_document_service(
     return DocumentService(
         repository=repository, storage=storage, vector_store=vector_store
     )
+
+
+def get_page_preview_service(
+    document_service: DocumentService = Depends(get_document_service),
+    vector_store: VectorStore = Depends(get_vector_store),
+) -> PagePreviewService:
+    return PagePreviewService(document_service=document_service, vector_store=vector_store)
 
 
 def get_processing_service(

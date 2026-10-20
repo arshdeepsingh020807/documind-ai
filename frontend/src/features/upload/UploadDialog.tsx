@@ -1,5 +1,6 @@
 import { AlertCircle, CheckCircle2, FileText, UploadCloud, X } from 'lucide-react'
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { Button, IconButton } from '../../components/Button'
 import { Dialog } from '../../components/Dialog'
 import { Spinner } from '../../components/Spinner'
@@ -65,6 +66,11 @@ export function UploadDialog({ open, onClose, queue }: UploadDialogProps) {
         <input ref={inputRef} type="file" multiple accept={ACCEPT_ATTRIBUTE} onChange={onPick} className="sr-only" tabIndex={-1} aria-label="Choose files to upload" />
       </div>
 
+      <p className="dialog__note">
+        This site has no accounts: every document is visible to everyone who uses it, and its text is sent to an AI
+        provider to answer questions. Don’t upload anything sensitive.
+      </p>
+
       {items.length > 0 && (
         <ul className="queue" aria-label="Upload progress" aria-live="polite">
           {items.map((item) => (
@@ -83,6 +89,11 @@ export function UploadDialog({ open, onClose, queue }: UploadDialogProps) {
                 {item.state === 'done' && <CheckCircle2 size={18} />}
                 {item.state === 'error' && <AlertCircle size={18} />}
               </span>
+              {item.state === 'done' && item.documentId && (
+                <Link to={`/d/${item.documentId}`} className="btn btn--secondary btn--sm" onClick={close}>
+                  {item.ready ? 'Open chat' : 'Open'}
+                </Link>
+              )}
               {item.state === 'error' && (
                 <IconButton label={`Remove ${item.name} from the list`} onClick={() => remove(item.id)}>
                   <X size={16} />

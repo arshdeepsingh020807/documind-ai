@@ -1,11 +1,12 @@
-import { Hash, ListChecks, Sparkles, Trash2 } from 'lucide-react'
+import { Hash, Lightbulb, ListChecks, Sparkles, Trash2, X } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { DocumentSummary } from '../../api/types'
-import { Button } from '../../components/Button'
+import { Button, IconButton } from '../../components/Button'
 import { ConfirmDialog } from '../../components/ConfirmDialog'
 import { FileIcon } from '../../components/FileIcon'
 import { LogoMark } from '../../components/Logo'
 import type { ChatMessage } from '../../lib/chatHistory'
+import { useCoachMark } from '../../lib/coachMark'
 import { formatBytes, pluralize } from '../../lib/format'
 import { Composer } from './Composer'
 import { MessageItem } from './MessageItem'
@@ -32,6 +33,8 @@ interface ChatPanelProps {
 export function ChatPanel({ doc, messages, pending, selectedId, onSend, onStop, onRetry, onClear, onShowSources, onCite }: ChatPanelProps) {
   const endRef = useRef<HTMLDivElement>(null)
   const [confirmClear, setConfirmClear] = useState(false)
+  const [tipVisible, dismissTip] = useCoachMark('citations')
+  const showTip = tipVisible && messages.some((m) => m.sources?.length)
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -64,7 +67,7 @@ export function ChatPanel({ doc, messages, pending, selectedId, onSend, onStop, 
           ) : (
             <div className="chat__log" role="log" aria-live="polite" aria-relevant="additions">
               {messages.map((m) => (
-                <MessageItem key={m.id} message={m} selected={m.id === selectedId} onShowSources={onShowSources} onCite={onCite} onRetry={onRetry} retryDisabled={pending} />
+                <MessageItem key={m.id} message={m} selected={m.id === selectedId} onShowSources={onShowSources} onCite={(message, n) => { dismissTip(); onCite(message, n) }} onRetry={onRetry} retryDisabled={pending} />
               ))}
               {pending && (
                 <article className="msg msg--assistant" aria-label="DocuMind is answering">
@@ -86,6 +89,13 @@ export function ChatPanel({ doc, messages, pending, selectedId, onSend, onStop, 
       </div>
       <div className="chat__footer">
         <div className="chat__inner">
+          {showTip && (
+            <div className="coach" role="note">
+              <Lightbulb size={16} aria-hidden />
+              <p>Tip: click a numbered chip in an answer to see exactly where that claim came from.</p>
+              <IconButton label="Dismiss tip" onClick={dismissTip}><X size={16} /></IconButton>
+            </div>
+          )}
           {messages.length > 0 && (
             <div className="chat__tools">
               <Button size="sm" variant="quiet" icon={<Trash2 size={14} />} onClick={() => setConfirmClear(true)}>Clear conversation</Button>

@@ -82,6 +82,12 @@ class FaissVectorStore(VectorStore):
     return results
 
 
+  def get_chunk(self, document_id: str, chunk_index: int) -> EmbeddedChunk | None:
+    for embedded in self._load_metadata(document_id):
+      if embedded.chunk.chunk_index == chunk_index:
+        return embedded
+    return None
+
   def delete(self, document_id: str) -> None:
     self._index_path(document_id).unlink(missing_ok=True)
     self._metadata_path(document_id).unlink(missing_ok=True)

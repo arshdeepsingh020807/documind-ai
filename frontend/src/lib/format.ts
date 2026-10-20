@@ -33,6 +33,8 @@ export type StatusTone = 'neutral' | 'busy' | 'good' | 'bad'
 
 export interface StatusInfo {
   label: string
+  /** One plain sentence for a tooltip. */
+  hint: string
   tone: StatusTone
   /** Indexed and searchable. */
   ready: boolean
@@ -42,13 +44,13 @@ export function statusInfo(status: DocumentStatus): StatusInfo {
   switch (status) {
     case 'processed':
     case 'ready':
-      return { label: 'Ready', tone: 'good', ready: true }
+      return { label: 'Ready', hint: 'Processed. You can ask questions about this document.', tone: 'good', ready: true }
     case 'processing':
-      return { label: 'Processing', tone: 'busy', ready: false }
+      return { label: 'Processing', hint: 'Being read and indexed. This usually takes seconds.', tone: 'busy', ready: false }
     case 'failed':
-      return { label: 'Failed', tone: 'bad', ready: false }
+      return { label: 'Failed', hint: 'Processing failed. The reason is shown; you can try again.', tone: 'bad', ready: false }
     case 'uploaded':
-      return { label: 'Not processed', tone: 'neutral', ready: false }
+      return { label: 'Not processed', hint: 'Uploaded but not read yet. Process it to start asking questions.', tone: 'neutral', ready: false }
   }
 }
 

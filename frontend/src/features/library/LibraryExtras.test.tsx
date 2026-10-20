@@ -13,7 +13,7 @@ describe('keyboard and summary', () => {
   it('"/" focuses the search box, but not while typing elsewhere', async () => {
     const user = userEvent.setup()
     stubApi([route('GET', /^\/documents$/, () => ({ json: DOCS }))])
-    renderApp('/')
+    renderApp('/library')
     const search = await screen.findByRole('searchbox')
 
     await user.keyboard('/')
@@ -27,7 +27,7 @@ describe('keyboard and summary', () => {
   it('Escape clears the search first, then leaves the box', async () => {
     const user = userEvent.setup()
     stubApi([route('GET', /^\/documents$/, () => ({ json: DOCS }))])
-    renderApp('/')
+    renderApp('/library')
     const search = await screen.findByRole('searchbox')
 
     await user.type(search, 'one')
@@ -40,7 +40,7 @@ describe('keyboard and summary', () => {
 
   it('summarises documents, ready count, pages and storage', async () => {
     stubApi([route('GET', /^\/documents$/, () => ({ json: DOCS }))])
-    renderApp('/')
+    renderApp('/library')
     const summary = await screen.findByLabelText('Library summary')
     expect(stat(summary, 'documents')).toBe('2')
     expect(stat(summary, 'ready to chat')).toBe('1')
@@ -50,7 +50,7 @@ describe('keyboard and summary', () => {
 
   it('uses singular wording for a single document', async () => {
     stubApi([route('GET', /^\/documents$/, () => ({ json: [makeDoc({ pages: 1 })] }))])
-    renderApp('/')
+    renderApp('/library')
     const summary = await screen.findByLabelText('Library summary')
     expect(stat(summary, 'document')).toBe('1')
     expect(stat(summary, 'documents')).toBeUndefined()
@@ -68,7 +68,7 @@ describe('page structure', () => {
 
   it('library has an h1 and the empty state does not add a second', async () => {
     stubApi([route('GET', /^\/documents$/, () => ({ json: [] }))])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByRole('heading', { name: 'Ask your documents questions' })
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
   })

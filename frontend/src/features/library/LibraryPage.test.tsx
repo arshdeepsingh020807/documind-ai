@@ -15,7 +15,7 @@ const list = (docs: DocumentSummary[]) => route('GET', /^\/documents$/, () => ({
 describe('LibraryPage', () => {
   it('lists documents newest first with status, and a clear summary', async () => {
     stubApi([list(DOCS)])
-    renderApp('/')
+    renderApp('/library')
 
     const rows = await screen.findAllByRole('row')
     // header + 3 documents
@@ -31,7 +31,7 @@ describe('LibraryPage', () => {
 
   it('gives each row the right primary action', async () => {
     stubApi([list(DOCS)])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Annual report.pdf')
 
     expect(screen.getByRole('link', { name: 'Chat' })).toHaveAttribute('href', '/d/a')
@@ -42,7 +42,7 @@ describe('LibraryPage', () => {
   it('searches, filters and shows a no-match state that can be cleared', async () => {
     const user = userEvent.setup()
     stubApi([list(DOCS)])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Annual report.pdf')
 
     await user.type(screen.getByRole('searchbox', { name: /search documents/i }), 'meeting')
@@ -63,7 +63,7 @@ describe('LibraryPage', () => {
   it('sorts by name', async () => {
     const user = userEvent.setup()
     stubApi([list(DOCS)])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Annual report.pdf')
     await user.selectOptions(screen.getByRole('combobox', { name: /sort documents/i }), 'name')
     const names = screen.getAllByRole('row').slice(1).map((row) => within(row).getAllByRole('link')[0]?.textContent)
@@ -72,7 +72,7 @@ describe('LibraryPage', () => {
 
   it('shows an empty state with an upload call to action', async () => {
     stubApi([list([])])
-    renderApp('/')
+    renderApp('/library')
     expect(await screen.findByRole('heading', { name: 'Ask your documents questions' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /upload your first document/i })).toBeInTheDocument()
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument()
@@ -83,7 +83,7 @@ describe('LibraryPage', () => {
     const user = userEvent.setup()
     let fail = true
     stubApi([route('GET', /^\/documents$/, () => (fail ? { status: 400, json: { detail: 'Storage unavailable.' } } : { json: DOCS }))])
-    renderApp('/')
+    renderApp('/library')
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Storage unavailable.')
     fail = false
@@ -93,7 +93,7 @@ describe('LibraryPage', () => {
 
   it('explains a network failure', async () => {
     stubApi([route('GET', /^\/documents$/, () => 'network-error')])
-    renderApp('/')
+    renderApp('/library')
     expect(await screen.findByRole('alert')).toHaveTextContent(/can't reach the server/i)
   })
 
@@ -107,7 +107,7 @@ describe('LibraryPage', () => {
         return { json: { document_id: 'b', status: 'processed', page_count: 2, word_count: 99, message: 'ok' } }
       }),
     ])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Meeting notes.txt')
 
     await user.click(screen.getByRole('button', { name: 'Process' }))
@@ -123,7 +123,7 @@ describe('LibraryPage', () => {
       list(DOCS),
       route('POST', /\/documents\/b\/process$/, () => ({ status: 502, json: { detail: 'The AI provider rate limit or quota was reached.' } })),
     ])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Meeting notes.txt')
 
     await user.click(screen.getByRole('button', { name: 'Process' }))
@@ -142,7 +142,7 @@ describe('LibraryPage', () => {
         return { status: 204 }
       }),
     ])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Meeting notes.txt')
 
     await user.click(screen.getByRole('button', { name: 'Delete Meeting notes.txt' }))
@@ -163,7 +163,7 @@ describe('LibraryPage', () => {
   it('keeps the document and says why when delete fails', async () => {
     const user = userEvent.setup()
     stubApi([list(DOCS), route('DELETE', /\/documents\/a$/, () => ({ status: 409, json: { detail: 'This document is currently being processed.' } }))])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Annual report.pdf')
 
     await user.click(screen.getByRole('button', { name: 'Delete Annual report.pdf' }))
@@ -175,7 +175,7 @@ describe('LibraryPage', () => {
 
   it('disables delete while a document is processing', async () => {
     stubApi([list([makeDoc({ id: 'p', filename: 'Busy.pdf', status: 'processing' })])])
-    renderApp('/')
+    renderApp('/library')
     await screen.findByText('Busy.pdf')
     expect(screen.getByRole('button', { name: 'Delete Busy.pdf' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'Processing' })).toBeDisabled()
@@ -186,7 +186,7 @@ describe('LibraryPage', () => {
     try {
       let status: DocumentSummary['status'] = 'processing'
       const api = stubApi([route('GET', /^\/documents$/, () => ({ json: [makeDoc({ id: 'p', filename: 'Slow.pdf', status })] }))])
-      renderApp('/')
+      renderApp('/library')
       await screen.findByText('Slow.pdf')
       const before = api.calls.length
 

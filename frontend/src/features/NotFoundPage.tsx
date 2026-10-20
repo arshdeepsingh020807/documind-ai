@@ -9,7 +9,7 @@ export function NotFoundPage() {
     <>
       <AppHeader />
       <main id="main" className="page page--narrow">
-        <EmptyState level={1} title="Page not found" action={<Link to="/" className="btn btn--primary btn--md">Go to library</Link>}>
+        <EmptyState level={1} title="Page not found" action={<Link to="/library" className="btn btn--primary btn--md">Go to library</Link>}>
           There’s nothing at this address.
         </EmptyState>
       </main>
