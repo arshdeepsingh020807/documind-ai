@@ -28,6 +28,7 @@ from app.vectorStores.vector_store import VectorStore
 def get_openai_client() -> OpenAI:
     return OpenAI(
         api_key=settings.OPENAI_API_KEY,
+        base_url=settings.OPENAI_BASE_URL or None,
         timeout=settings.OPENAI_TIMEOUT_SECONDS,
         max_retries=2,
     )

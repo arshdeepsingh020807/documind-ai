@@ -9,7 +9,7 @@ from app.models.models.llm_response import LLMResponse
 def describe_openai_error(error: openai.OpenAIError) -> str:
     """User-safe message; provider error text can echo parts of the API key."""
     if isinstance(error, openai.AuthenticationError):
-        return "The AI provider rejected the API key."
+        return "The AI provider rejected the API key. Check OPENAI_API_KEY, and OPENAI_BASE_URL if you use a provider other than OpenAI."
     if isinstance(error, openai.RateLimitError):
         return "The AI provider rate limit or quota was reached. Try again shortly."
     if isinstance(error, (openai.APIConnectionError, openai.APITimeoutError)):
@@ -23,11 +23,15 @@ class OpenAILLMService(LLMService):
         self._model = model
 
     def generate(self, prompt: str) -> LLMResponse:
+        # Chat completions is the API every OpenAI-compatible provider implements.
         try:
-            response = self._client.responses.create(
+            response = self._client.chat.completions.create(
                 model=self._model,
-                input=prompt,
+                messages=[{"role": "user", "content": prompt}],
             )
         except openai.OpenAIError as e:
             raise AIProviderError(describe_openai_error(e)) from e
-        return LLMResponse(text=response.output_text)
+        text = (response.choices[0].message.content or "").strip() if response.choices else ""
+        if not text:
+            raise AIProviderError("The AI provider returned an empty answer. Try again, or check OPENAI_MODEL.")
+        return LLMResponse(text=text)

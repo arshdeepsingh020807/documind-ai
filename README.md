@@ -57,9 +57,23 @@ Errors are `{"detail": "..."}` with a meaningful status: `400` unsupported/empty
 
 A document moves `uploaded → processing → processed`, or `failed` (with a reason, and it can be retried).
 
+## Using OpenRouter (or another OpenAI-compatible provider)
+
+By default the app talks to OpenAI, which rejects any other provider's key. To use OpenRouter instead, set:
+
+```
+OPENAI_API_KEY=<your OpenRouter key>
+OPENAI_BASE_URL=https://openrouter.ai/api/v1
+OPENAI_MODEL=openai/gpt-5-mini              # any chat model id from openrouter.ai/models
+EMBEDDING_MODEL=openai/text-embedding-3-small
+EMBEDDING_DIMENSION=1536                    # must match the embedding model
+```
+
+The app only uses the standard `chat/completions` and `embeddings` endpoints. If you switch embedding models after documents were processed, re-process them, because their stored vectors no longer match.
+
 ## Configuration
 
-Set in `.env` (see `.env.example`): `OPENAI_API_KEY` (required), `OPENAI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIMENSION` (must match the embedding model), `MAX_UPLOAD_MB`, `CHUNK_SIZE`, `CHUNK_OVERLAP`, and the storage paths.
+Set in `.env` (see `.env.example`): `OPENAI_API_KEY` (required), `OPENAI_BASE_URL`, `OPENAI_MODEL`, `EMBEDDING_MODEL`, `EMBEDDING_DIMENSION` (must match the embedding model), `MAX_UPLOAD_MB`, `CHUNK_SIZE`, `CHUNK_OVERLAP`, and the storage paths.
 
 ## Tests
 

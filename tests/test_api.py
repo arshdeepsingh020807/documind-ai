@@ -249,3 +249,28 @@ def test_documents_are_isolated_in_search(client):
 
 def test_unknown_api_path_404s_not_spa(client):
     assert client.get("/documents/x/y/z").status_code == 404
+
+
+def test_embeddings_are_requested_as_plain_floats(client, fake_openai):
+    """Not every OpenAI-compatible provider (OpenRouter, etc.) supports the SDK's default base64 encoding."""
+    doc_id = uploaded_id(client)
+    client.post(f"/documents/{doc_id}/process")
+    client.post("/documents/chat", json={"question": "hi", "document_id": doc_id})
+    assert fake_openai.embedding_kwargs and all(k == {"encoding_format": "float"} for k in fake_openai.embedding_kwargs)
+
+
+def test_empty_model_answer_is_a_clear_502_not_a_blank_message(client, fake_openai):
+    doc_id = uploaded_id(client)
+    client.post(f"/documents/{doc_id}/process")
+    fake_openai.empty_answer = True
+    response = client.post("/documents/chat", json={"question": "hi", "document_id": doc_id})
+    assert response.status_code == 502
+    assert "empty answer" in response.json()["detail"]
+
+
+def test_rejected_key_message_points_at_the_base_url_setting(client, fake_openai):
+    doc_id = uploaded_id(client)
+    fake_openai.fail_with = "auth"
+    detail = client.post(f"/documents/{doc_id}/process").json()["detail"]
+    assert "rejected the API key" in detail and "OPENAI_BASE_URL" in detail
+    assert "sk-secret" not in detail

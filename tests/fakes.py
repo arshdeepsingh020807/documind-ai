@@ -31,8 +31,10 @@ class FakeOpenAI:
     def __init__(self):
         self.fail_with: str | None = None
         self.embedding_calls: list[int] = []
+        self.embedding_kwargs: list[dict] = []
+        self.empty_answer = False
         self.embeddings = SimpleNamespace(create=self._create_embeddings)
-        self.responses = SimpleNamespace(create=self._create_response)
+        self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create_chat))
 
     def _maybe_fail(self):
         if self.fail_with == "auth":
@@ -42,17 +44,20 @@ class FakeOpenAI:
         if self.fail_with == "connection":
             raise openai.APIConnectionError(request=httpx.Request("POST", "https://api.openai.test"))
 
-    def _create_embeddings(self, model, input):
+    def _create_embeddings(self, model, input, **kwargs):
         self._maybe_fail()
+        self.embedding_kwargs.append(kwargs)
         texts = [input] if isinstance(input, str) else list(input)
         self.embedding_calls.append(len(texts))
         # Reverse the order to prove callers sort by `index` rather than trusting arrival order.
         data = [SimpleNamespace(index=i, embedding=_vector(t)) for i, t in enumerate(texts)]
         return SimpleNamespace(data=list(reversed(data)))
 
-    def _create_response(self, model, input):
+    def _create_chat(self, model, messages):
         self._maybe_fail()
-        question = input.rsplit("Question:\n", 1)[-1].split("\n\nAnswer:")[0].strip()
+        prompt = messages[-1]["content"]
+        question = prompt.rsplit("Question:\n", 1)[-1].split("\n\nAnswer:")[0].strip()
         # Cite the first passage, as the prompt instructs, so citation rendering gets exercised.
-        cite = " [1]" if "\n[1]\n" in input else ""
-        return SimpleNamespace(output_text=f"FAKE ANSWER to: {question}{cite}")
+        cite = " [1]" if "\n[1]\n" in prompt else ""
+        text = None if self.empty_answer else f"FAKE ANSWER to: {question}{cite}"
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=text))])

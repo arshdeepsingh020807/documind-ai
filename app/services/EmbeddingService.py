@@ -32,6 +32,8 @@ class EmbeddingService():
       response = self._client.embeddings.create(
         model=self._model_name,
         input=texts,
+        # Explicit: the SDK would otherwise request base64, which not every compatible provider supports.
+        encoding_format="float",
       )
     except openai.OpenAIError as e:
       raise AIProviderError(describe_openai_error(e)) from e

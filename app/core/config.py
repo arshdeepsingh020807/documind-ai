@@ -4,6 +4,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     OPENAI_API_KEY: str
 
+    # Leave unset for OpenAI. Set to another OpenAI-compatible provider's address to use it instead,
+    # e.g. https://openrouter.ai/api/v1 (then OPENAI_API_KEY is that provider's key).
+    OPENAI_BASE_URL: str | None = None
+
     OPENAI_MODEL: str = "gpt-5-mini"
 
     EMBEDDING_MODEL: str = "text-embedding-3-small"
