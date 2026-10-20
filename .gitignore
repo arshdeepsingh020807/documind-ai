@@ -1,0 +1,44 @@
+# Virtual Environment
+.venv/
+venv/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+
+
+# Generated Vector Database
+data/vector_store/
+
+# Test / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Python Packaging
+build/
+dist/
+*.egg-info/
+# Frontend
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Runtime state (recreated automatically)
+data/document.json

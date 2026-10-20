@@ -1,0 +1,123 @@
+/* Design tokens. Every colour, size and radius in the app comes from here.
+
+   Neutrals, accent and status colours come from the Radix Colors scales (sand, indigo, grass, red, amber),
+   which are built so that steps 1-2 are backgrounds, 3-5 component fills, 6-8 borders, 9-10 solid fills and
+   11-12 text. `npm run check:contrast` verifies each pair below against WCAG 2 and APCA. */
+:root {
+  color-scheme: light;
+
+  /* Surfaces: the page is a shade darker than the reading sheet that sits on it. */
+  --bg: #f9f9f8;
+  --surface: #fdfdfc;
+  --surface-2: #f1f0ef;
+  --surface-3: #e9e8e6;
+  --line: #dad9d6;
+  --line-strong: #cfceca;
+  --control: #8d8d86; /* borders of inputs and buttons: 3:1 against the surface (WCAG 1.4.11) */
+
+  /* Text */
+  --ink: #21201c;
+  --ink-2: #44433e;
+  --muted: #63635e;
+
+  /* Accent: indigo. --accent is a fill (white text on it); --accent-text is for text and icons on light surfaces. */
+  --accent: #3e63dd;
+  --accent-hover: #3358d4;
+  --accent-ink: #ffffff;
+  --accent-text: #3a5bc7;
+  --accent-soft: #edf2fe;
+  --accent-soft-2: #e1e9ff;
+  --accent-line: #abbdf9;
+  --focus: #3e63dd;
+
+  /* Status: text colour on a soft tint, so state is never colour alone (icons and labels carry it too). */
+  --good: #2a7e3b;
+  --good-soft: #e9f6e9;
+  --bad: #ce2c31;
+  --bad-soft: #feebec;
+  --bad-solid: #ce2c31;
+  --on-bad: #ffffff;
+  --busy: #8f5300;
+  --busy-soft: #fff7c2;
+  --neutral-soft: #e9e8e6;
+
+  --backdrop: rgb(24 22 18 / 0.45);
+  --shadow-pop: 0 10px 32px rgb(33 32 28 / 0.16), 0 2px 6px rgb(33 32 28 / 0.08);
+
+  --font-ui: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
+
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+
+  --header-h: 56px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #111110;
+    --surface: #191918;
+    --surface-2: #222221;
+    --surface-3: #2a2a28;
+    --line: #3b3a37;
+    --line-strong: #494844;
+    --control: #85837c;
+    --ink: #eeeeec;
+    --ink-2: #d1d0cb;
+    --muted: #c0beb8;
+    --accent: #3e63dd;
+    --accent-hover: #3358d4;
+    --accent-ink: #ffffff;
+    --accent-text: #b2c2ff;
+    --accent-soft: #182449;
+    --accent-soft-2: #1d2e62;
+    --accent-line: #3a4f97;
+    --focus: #b2c2ff;
+    --good: #71d083;
+    --good-soft: #1b2a1e;
+    --bad: #ffa5a2;
+    --bad-soft: #3b1219;
+    --bad-solid: #ce2c31;
+    --on-bad: #ffffff;
+    --busy: #ffca16;
+    --busy-soft: #302008;
+    --neutral-soft: #2a2a28;
+    --backdrop: rgb(0 0 0 / 0.6);
+    --shadow-pop: 0 10px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.4);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111110;
+  --surface: #191918;
+  --surface-2: #222221;
+  --surface-3: #2a2a28;
+  --line: #3b3a37;
+  --line-strong: #494844;
+  --control: #85837c;
+  --ink: #eeeeec;
+  --ink-2: #d1d0cb;
+  --muted: #c0beb8;
+  --accent: #3e63dd;
+  --accent-hover: #3358d4;
+  --accent-ink: #ffffff;
+  --accent-text: #b2c2ff;
+  --accent-soft: #182449;
+  --accent-soft-2: #1d2e62;
+  --accent-line: #3a4f97;
+  --focus: #b2c2ff;
+  --good: #71d083;
+  --good-soft: #1b2a1e;
+  --bad: #ffa5a2;
+  --bad-soft: #3b1219;
+  --bad-solid: #ce2c31;
+  --on-bad: #ffffff;
+  --busy: #ffca16;
+  --busy-soft: #302008;
+  --neutral-soft: #2a2a28;
+  --backdrop: rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 10px 32px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.4);
+}
